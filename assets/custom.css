@@ -1,0 +1,42 @@
+#app-title > * {
+    color: white;
+    margin: 0;
+    padding: 0;
+    font-family: "Arial Rounded MT Bold", "Helvetica Rounded", Arial, sans-serif;
+}
+
+#howto-open {
+    white-space: nowrap;
+    margin: 2;
+}
+
+#marcelo_in {
+    white-space: nowrap;
+    margin: 2;
+}
+
+#hande_in {
+    white-space: nowrap;
+    margin: 2;
+}
+
+#gh-link {
+    white-space: nowrap;
+}
+
+.card {
+    margin: 1em 0 1em 0;
+    min-width: auto;
+}
+
+label {
+  display: block;
+  margin-bottom: 0;
+  
+}
+
+#transparent-loader-wrapper > div {
+    visibility: visible !important;
+}
+
+
