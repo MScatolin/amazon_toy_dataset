@@ -2,7 +2,6 @@ from dash import Dash, html, dash_table, dcc
 from dash_table import FormatTemplate
 from dash_table.Format import Format
 from dash.dependencies import Input, Output, State
-from flask_caching import Cache
 import plotly.graph_objects as go
 import dash_daq as daq
 import dash_bootstrap_components as dbc
@@ -704,4 +703,4 @@ def toggle_navbar_collapse(n, is_open):
 
 
 if __name__ == '__main__':
-    app.run_server(debug=False)
+    app.run_server(host='0.0.0.0', port=443, debug=False)
