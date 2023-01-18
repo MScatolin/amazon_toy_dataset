@@ -78,7 +78,34 @@ tech_info_cols = ['model_no', 'weight', 'dimension', 'recom_age', 'assembly', 'e
                   'first_del_date']
 
 bsr_max = df['best_seller_rank'].max()
-bsr_min = 0                  
+bsr_min = 0
+
+#top opportunity index for prediction
+pred_example_index = 7734
+
+# data for sales function
+sales_curve_df = pd.DataFrame({'bsr': [1,5,10,17,20,38,49,50,55,67,72,88,93,100,250,
+                                  500,1000,2000,3000,4000,6000,8000,10000,15000,
+                                  20000,25000,30000,35000,40000],
+                          'monthly_sales':[13367,10011,8573,8020,7783,6362,5493,5414,
+                                           5296,5011,4893,4514,4396,4230,2968,
+                                           2129,1445,937,673,557,399,388,324,220,
+                                           151,85,18,3,1]})
+
+def sales_pred(x_data, y_data, x):
+  try:
+    for i in range(len(x_data)):
+      x1 = x_data[i]
+      x2 = x_data[i+1]
+      y1 = y_data[i]
+      y2 = y_data[i+1]
+      if x1 <= x <= x2:
+        slope = (y2 - y1)/(x2 - x1)
+        y_intercept = y1 - slope * x1
+        y = slope * x + y_intercept
+        return round(y)
+  except: # when more than our last point, return the last point
+    return 1
 
 # header buttons
 button_hande = dbc.Button(
@@ -502,9 +529,7 @@ app.layout = html.Div(
                                 ),
                             ],
                             label = 'Interactive Tool'),
-                        dbc.Tab(business_case, label = 'Business'),
-                        dbc.Tab('tab3',label = 'Data'),
-                        dbc.Tab('tab4',label = 'Modeling')
+                        dbc.Tab(business_case, label = 'Pythia in a glimpse')
                     ]
                 )
             ]
@@ -538,7 +563,7 @@ def filter_by_treemap(clickData):
         filtered_df = df
 
 
-    return filtered_df.to_dict('records'), 'For ' + cat + ', we can increase', '$ {:,.2f}'.format(filtered_df['Opportunity'].sum())
+    return filtered_df.to_dict('records'), 'For ' + cat + ', we can increase', '£ {:,.2f}'.format(filtered_df['Opportunity'].sum())
 
 def draw_stars(rating):
     ''' Helper method that takes a float from 0 to 5 and return html elements to draw a 5 star rate using Bootstrap icons'''
@@ -612,7 +637,7 @@ def slider_marks(min, max, now, realized, future):
 def show_product_name(window, cel, data):
     df = pd.DataFrame(data)
     
-    bounty='$ 0'
+    bounty='£ 0'
     question_list = []
     rec_info = []
     rec_desc = []
@@ -665,14 +690,14 @@ def show_product_name(window, cel, data):
    
         
         return [prod,
-               '$ {:,.2f}'.format(bounty),
+               '£ {:,.2f}'.format(bounty),
                show_product, 
                avg_rate_stars,
                '({:,.2f})'.format(avg_rate),
                 str(rev_count) + ' reviews', 
                 str(ans_count) + ' answered question(s)', 
                 str(tru_ans_count) + ' available question(s)',
-                html.H5('Price: $ {:,.2f}'.format(price)),
+                html.H5('Price: £ {:,.2f}'.format(price)),
                 desc,
                 info_data,
                 question_list_data,
@@ -693,6 +718,45 @@ def show_product_name(window, cel, data):
     else:
         prod = 'Select a product to begin'
         pass
+
+@app.callback(
+    Output('result_model','children'),
+    Output('result_model_money','children'),
+    Output('result_model_opp','children'),
+    Input('dim_tog','on'),
+    Input('recag_tog','on'),
+    Input('batt_tog','on'),
+    Input('slider_sim', 'value'))
+def filter_by_treemap(dim_tog, recag_tog, batt_tog, slider_sim ):
+    # check each of our inputs:
+    if  dim_tog == True:
+        dt = 0
+    else:
+        dt = 1
+
+    if recag_tog == True:
+        rt = 0
+    else:
+        rt = 1
+    
+    if batt_tog == True:
+        bt = 0
+    else:
+        bt = 1
+
+    # and update the similarity value
+    sl = slider_sim
+
+    #to have a new prediction
+    result_1 = 2828 - (dt+rt+bt)*940*sl
+
+    value = sales_pred(sales_curve_df['bsr'], sales_curve_df['monthly_sales'], result_1)*11.95
+
+    result_2 = '£ {:,.2f}'.format(value)
+
+    result_3 = '£ {:,.2f}'.format(value - sales_pred(sales_curve_df['bsr'], sales_curve_df['monthly_sales'], 2828)*11.95)
+ 
+    return int(result_1), result_2, result_3
 
 @app.callback(
     Output("Navbar-collapse", "is_open"),
