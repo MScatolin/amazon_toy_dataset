@@ -9,6 +9,9 @@ import plotly.express as px
 import pandas as pd
 import math
 
+# pages from folder 'pages':
+from pages.business import business_case
+
 external_stylesheets = [dbc.themes.BOOTSTRAP, 
                         dbc.icons.BOOTSTRAP,
                         "assets/custom.css"]
@@ -499,7 +502,7 @@ app.layout = html.Div(
                                 ),
                             ],
                             label = 'Interactive Tool'),
-                        dbc.Tab('tab2', label = 'Business'),
+                        dbc.Tab(business_case, label = 'Business'),
                         dbc.Tab('tab3',label = 'Data'),
                         dbc.Tab('tab4',label = 'Modeling')
                     ]
@@ -703,4 +706,4 @@ def toggle_navbar_collapse(n, is_open):
 
 
 if __name__ == '__main__':
-    app.run_server(host='0.0.0.0', port=80, debug=False)
+    app.run_server(host='0.0.0.0', port=80, debug=True)
