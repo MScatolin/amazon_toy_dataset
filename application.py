@@ -499,6 +499,57 @@ product_detail = dbc.Col(
     md=12,
 )
 
+# intro page with some context and instructions
+intro_card = dbc.Card(
+            id='intro_card',
+            children=[
+                dbc.CardHeader('Where this came from?'),
+                dbc.CardBody(
+                    [
+                        dbc.Row(
+                            [
+                            dbc.Col(
+                                children=[
+                                    html.P('''This project was part of the Data Science For All program developed by Correlation One and 
+                                            sponsored by Walmart where 16 students were selected to participate in a 5-weeks bootcamp and
+                                            develop an end-to-end data science project using a subset of an Amazon Product Dataset available 
+                                            on Kaggle, re-branded as a fictious store "OnlineRetail.co.uk".
+                                            '''),
+                                    html.P('''With that task in mind, me and my partner Hande decided to investigate the impact of the Q&A
+                                            feature on that website's revenue, creating Project Pythia (named after the  high-prestess of the Oracle of 
+                                            Delphi). For each of the 10.000 products on our dataset, we used topic modeling techniques to understand
+                                            what information was detailed on the product description and cross-referenced that with informations on
+                                            questions and answers from each product. Finally we utilized an XGBoost model to predict the potential 
+                                            improvement in each produt's sales rank and converted it into revenue utilizing product sales data from top
+                                            Amazon products.
+                                           '''),
+                                    html.P('''The result is the Interactive Tool available on the next tab, where you can see products with the highest
+                                           potential for improvement and suggestions on how to improve the product description to maximize sales. Finally,
+                                           on the "Pythia in a glimpse" tab, you can see a summary of the business case, some examples, and the model for 
+                                           sales prediction.''')
+                                ],
+                                md=9
+                                ),
+                            dbc.Col(
+                                html.Div(
+                                    [
+                                        html.Img(src='assets/C1_logo.jpeg', style={'height':'150px'}),
+                                        html.Img(src='assets/walmart_logo.png', style={'height':'180px'}),
+                                    ],
+                                    style={'textAlign': 'center'}
+                                ),
+                                md=3
+                                ),
+                            dbc.Row(
+                        
+                            ),  
+                            ],
+                        ),    
+                    ],
+                ),
+            ],
+        ),
+    
 # app layout itself
 app.layout = html.Div(
     [
@@ -507,6 +558,15 @@ app.layout = html.Div(
             [
                 dbc.Tabs(
                     [
+                        dbc.Tab(
+                          [
+                            dbc.Container(
+                                [
+                                dbc.Col(intro_card, md=12),
+                                ],
+                            ),
+                          ],
+                          label = 'Start Here'),
                         dbc.Tab(
                             [
                                 dbc.Container( 
@@ -770,4 +830,4 @@ def toggle_navbar_collapse(n, is_open):
 
 
 if __name__ == '__main__':
-    app.run_server(host='0.0.0.0', port=80, debug=False)
+    app.run_server(host='0.0.0.0', port=80, debug=True)
